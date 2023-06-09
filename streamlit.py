@@ -8,6 +8,12 @@ def download_file_from_google_drive(file_id, destination):
     with open(destination, "wb") as f:
         f.write(response.content)
 
+def load_similarity(file_path):
+    with open(file_path, "rb") as f:
+        similarity = pickle.load(f)
+    return similarity
+        
+        
 def fetch_poster(movie_id):
     url = "https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US".format(movie_id)
     data = requests.get(url)
