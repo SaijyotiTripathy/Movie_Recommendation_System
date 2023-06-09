@@ -69,5 +69,5 @@ if st.button('Show Recommendation'):
         st.text(recommended_movie_names[4])
         #st.image(recommended_movie_posters[4])
         
- if st.button('Show Similarity Matrix'):
+if st.button('Show Similarity Matrix'):
     st.write(similarity)
