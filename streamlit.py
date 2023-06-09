@@ -35,6 +35,10 @@ response = requests.get(similarity_url)
 with open('similarity.pkl', 'wb') as file:
     file.write(response.content)
 
+# Load similarity.pkl
+with open('similarity.pkl', 'rb') as file:
+    similarity = pickle.load(file)
+
 movie_list = list(movies['title'].values())
 selected_movie = st.selectbox(
     "Type or select a movie from the dropdown",
