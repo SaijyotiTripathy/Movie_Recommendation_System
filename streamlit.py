@@ -27,7 +27,7 @@ def recommend(movie):
 st.header('Movie Recommender System')
 
 # Load movie_list.pkl from GitHub
-movies = st.cache(pickle.load)(open('movie_list.pkl', 'rb'))
+movies = st.cache(pickle.load)(open('movie_dict.pkl', 'rb'))
 
 # Download similarity.pkl from Google Drive
 similarity_url = "https://drive.google.com/uc?export=download&id=1iEdX1JcjJdT2HYiNKmeJMKf9bpSEj07c"
