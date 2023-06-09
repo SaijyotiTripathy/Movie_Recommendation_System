@@ -11,15 +11,15 @@ def fetch_poster(movie_id):
     return full_path
 
 def recommend(movie):
-    index = movies['title'].index(movie)
+    index = list(movies['title'].values()).index(movie)
     distances = sorted(list(enumerate(similarity[index])), reverse=True, key=lambda x: x[1])
     recommended_movie_names = []
     recommended_movie_posters = []
     for i in distances[1:6]:
         # fetch the movie poster
-        movie_id = movies['movie_id'][i[0]]
+        movie_id = movies['movie_id'][i]
         recommended_movie_posters.append(fetch_poster(movie_id))
-        recommended_movie_names.append(movies['title'][i[0]])
+        recommended_movie_names.append(movies['title'][i])
 
     return recommended_movie_names,recommended_movie_posters
 
