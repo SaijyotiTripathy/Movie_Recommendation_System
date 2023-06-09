@@ -1,7 +1,7 @@
 import pickle
 import requests
 import streamlit as st
-from google.colab import drive
+import gdown
 
 def fetch_poster(movie_id):
     url = "https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US".format(movie_id)
@@ -35,9 +35,12 @@ drive.mount('/content/drive')
 movies = st.cache(pickle.load)(open('movie_dict.pkl', 'rb'))
 
 # Load similarity.pkl from Google Drive
-# Load similarity.pkl from Google Drive
-file_path = '/content/drive/MyDrive/GitHubShared/TMDB_5000_Movie_Dataset/similarity.pkl'
-similarity = pickle.load(open(file_path, 'rb'))
+similarity_url = "https://drive.google.com/uc?id=1iEdX1JcjJdT2HYiNKmeJMKf9bpSEj07c"
+output_file = "similarity.pkl"
+gdown.download(similarity_url, output_file, quiet=False)
+
+# Load similarity.pkl
+similarity = pickle.load(open(output_file, 'rb'))
 
 movie_list = list(movies['title'].values())
 selected_movie = st.selectbox(
@@ -65,3 +68,6 @@ if st.button('Show Recommendation'):
     with col5:
         st.text(recommended_movie_names[4])
         #st.image(recommended_movie_posters[4])
+        
+ if st.button('Show Similarity Matrix'):
+    st.write(similarity)
