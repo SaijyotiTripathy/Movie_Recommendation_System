@@ -35,7 +35,7 @@ response = requests.get(similarity_url)
 with open('similarity.pkl', 'wb') as file:
     file.write(response.content)
 
-movie_list = movies['title'].values
+movie_list = list(movies.keys())
 selected_movie = st.selectbox(
     "Type or select a movie from the dropdown",
     movie_list
