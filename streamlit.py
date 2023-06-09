@@ -1,5 +1,6 @@
-import streamlit as st
+import pickle
 import requests
+import streamlit as st
 
 def fetch_poster(movie_id):
     url = "https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US".format(movie_id)
@@ -24,8 +25,16 @@ def recommend(movie):
 
 
 st.header('Movie Recommender System')
+
+# Load movie_list.pkl from GitHub
 movies = st.cache(pickle.load)(open('movie_list.pkl', 'rb'))
-similarity = st.cache(pickle.load(open('similarity.pkl', 'rb'))
+
+# Download similarity.pkl from Google Drive
+similarity_url = "https://drive.google.com/uc?export=download&id=1iEdX1JcjJdT2HYiNKmeJMKf9bpSEj07c"
+response = requests.get(similarity_url)
+with open('similarity.pkl', 'wb') as file:
+    file.write(response.content)
+
 movie_list = movies['title'].values
 selected_movie = st.selectbox(
     "Type or select a movie from the dropdown",
