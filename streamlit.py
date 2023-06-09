@@ -1,18 +1,6 @@
 import pickle
 import requests
 import streamlit as st
-
-def download_file_from_google_drive(file_id, destination):
-    URL = "https://drive.google.com/uc?id={}".format(file_id)
-    response = requests.get(URL)
-    with open(destination, "wb") as f:
-        f.write(response.content)
-
-def load_similarity(file_path):
-    with open(file_path, "rb") as f:
-        similarity = pickle.load(f)
-    return similarity
-        
         
 def fetch_poster(movie_id):
     url = "https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US".format(movie_id)
@@ -41,17 +29,11 @@ st.header('Movie Recommender System')
 # Load movie_list.pkl from GitHub
 movies = st.cache(pickle.load)(open('movie_dict.pkl', 'rb'))
 
-# Specify the file ID of the similarity.pkl file in your Google Drive
-file_id = "1iEdX1JcjJdT2HYiNKmeJMKf9bpSEj07c"
-
-# Define the destination path where you want to save the file
-destination_path = "similarity.pkl"
-
-# Download the file from Google Drive
-download_file_from_google_drive(file_id, destination_path)
-
-# Load the similarity.pkl file
-similarity = load_similarity(destination_path)
+# Download similarity.pkl from Google Drive
+similarity_url = "https://drive.google.com/uc?export=download&id=1iEdX1JcjJdT2HYiNKmeJMKf9bpSEj07c"
+response = requests.get(similarity_url)
+with open('similarity.pkl', 'wb') as file:
+    file.write(response.content)
 
 movie_list = list(movies['title'].values())
 selected_movie = st.selectbox(
