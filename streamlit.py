@@ -2,6 +2,12 @@ import pickle
 import requests
 import streamlit as st
 
+def download_file_from_google_drive(file_id, destination):
+    URL = "https://drive.google.com/uc?id={}".format(file_id)
+    response = requests.get(URL)
+    with open(destination, "wb") as f:
+        f.write(response.content)
+
 def fetch_poster(movie_id):
     url = "https://api.themoviedb.org/3/movie/{}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US".format(movie_id)
     data = requests.get(url)
@@ -14,15 +20,14 @@ def recommend(movie):
     index = list(movies['title'].values()).index(movie)
     distances = sorted(list(enumerate(similarity[index])), reverse=True, key=lambda x: x[1])
     recommended_movie_names = []
-    #recommended_movie_posters = []
+    recommended_movie_posters = []
     for i in distances[1:6]:
         # fetch the movie poster
         movie_id = movies['movie_id'][i[0]]
-       # recommended_movie_posters.append(fetch_poster(movie_id))
+        recommended_movie_posters.append(fetch_poster(movie_id))
         recommended_movie_names.append(movies['title'][i[0]])
 
-    #return recommended_movie_names,recommended_movie_posters
-    return recommended_movie_names
+    return recommended_movie_names,recommended_movie_posters
 
 
 st.header('Movie Recommender System')
@@ -30,15 +35,17 @@ st.header('Movie Recommender System')
 # Load movie_list.pkl from GitHub
 movies = st.cache(pickle.load)(open('movie_dict.pkl', 'rb'))
 
-# Download similarity.pkl from Google Drive
-similarity_url = "https://drive.google.com/uc?id=1iEdX1JcjJdT2HYiNKmeJMKf9bpSEj07c"
-similarity_file = "similarity.pkl"
-response = requests.get(similarity_url)
-with open(similarity_file, 'wb') as f:
-    f.write(response.content)
+# Specify the file ID of the similarity.pkl file in your Google Drive
+file_id = "1iEdX1JcjJdT2HYiNKmeJMKf9bpSEj07c"
 
-# Load similarity.pkl
-similarity = pickle.load(open(similarity_file, 'rb'))
+# Define the destination path where you want to save the file
+destination_path = "similarity.pkl"
+
+# Download the file from Google Drive
+download_file_from_google_drive(file_id, destination_path)
+
+# Load the similarity.pkl file
+similarity = load_similarity(destination_path)
 
 movie_list = list(movies['title'].values())
 selected_movie = st.selectbox(
